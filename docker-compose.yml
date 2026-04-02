@@ -1,0 +1,100 @@
+services:
+  manticore-1:
+    image: manticoresearch/manticore:latest
+    container_name: manticore-1
+    restart: unless-stopped
+    networks:
+      manticore_net:
+        ipv4_address: 172.20.0.11
+    environment:
+      # Конфигурация через env — entrypoint обработает это корректно
+      - EXTRA_SEARCHD_ARGS=--listen=0.0.0.0:9306:mysql --listen=0.0.0.0:9308:http --listen=0.0.0.0:9312
+      - SEARCHD_DATA_DIR=/var/lib/manticore
+      - SEARCHD_LOG=/var/log/manticore/searchd.log
+      - SEARCHD_QUERY_LOG=/var/log/manticore/query.log
+      - SEARCHD_PID_FILE=/var/run/manticore/searchd.pid
+    volumes:
+      - manticore_data_1:/var/lib/manticore
+      - ./logs/manticore-1:/var/log/manticore
+    ports:
+      - "127.0.0.1:9306:9306"
+      - "127.0.0.1:9308:9308"
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 2 bash -c 'echo > /dev/tcp/127.0.0.1/9306' 2>/dev/null && exit 0 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  manticore-2:
+    image: manticoresearch/manticore:latest
+    container_name: manticore-2
+    restart: unless-stopped
+    networks:
+      manticore_net:
+        ipv4_address: 172.20.0.12
+    environment:
+      - EXTRA_SEARCHD_ARGS=--listen=0.0.0.0:9306:mysql --listen=0.0.0.0:9308:http --listen=0.0.0.0:9312
+      - SEARCHD_DATA_DIR=/var/lib/manticore
+      - SEARCHD_LOG=/var/log/manticore/searchd.log
+      - SEARCHD_QUERY_LOG=/var/log/manticore/query.log
+      - SEARCHD_PID_FILE=/var/run/manticore/searchd.pid
+    volumes:
+      - manticore_data_2:/var/lib/manticore
+      - ./logs/manticore-2:/var/log/manticore
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 2 bash -c 'echo > /dev/tcp/127.0.0.1/9306' 2>/dev/null && exit 0 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  manticore-3:
+    image: manticoresearch/manticore:latest
+    container_name: manticore-3
+    restart: unless-stopped
+    networks:
+      manticore_net:
+        ipv4_address: 172.20.0.13
+    environment:
+      - EXTRA_SEARCHD_ARGS=--listen=0.0.0.0:9306:mysql --listen=0.0.0.0:9308:http --listen=0.0.0.0:9312
+      - SEARCHD_DATA_DIR=/var/lib/manticore
+      - SEARCHD_LOG=/var/log/manticore/searchd.log
+      - SEARCHD_QUERY_LOG=/var/log/manticore/query.log
+      - SEARCHD_PID_FILE=/var/run/manticore/searchd.pid
+    volumes:
+      - manticore_data_3:/var/lib/manticore
+      - ./logs/manticore-3:/var/log/manticore
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 2 bash -c 'echo > /dev/tcp/127.0.0.1/9306' 2>/dev/null && exit 0 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  manticore_data_1: { driver: local }
+  manticore_data_2: { driver: local }
+  manticore_data_3: { driver: local }
+
+networks:
+  manticore_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

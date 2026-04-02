@@ -1,0 +1,36 @@
+# === СЕКРЕТЫ И КОНФИДЕНЦИАЛЬНОЕ ===
+.env
+*.pem
+*.key
+*.crt
+passwords.txt
+secrets/
+
+# === DOCKER ===
+docker-compose.override.yml
+.docker/
+
+# === ДАННЫЕ И ЛОГИ (тома) ===
+data/
+logs/
+volumes/
+*.sql.gz
+*.backup
+
+# === СИСТЕМНЫЕ ФАЙЛЫ ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# === ВРЕМЕННЫЕ ФАЙЛЫ ===
+tmp/
+temp/
+*.tmp
+*.log
+
+# === IDE ===
+.idea/
+.vscode/
+*.iml
