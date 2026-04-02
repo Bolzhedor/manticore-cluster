@@ -1,3 +1,3 @@
-# ClickHouse Cluster (3 Nodes + ZooKeeper)
+# Manticore Cluster
 
 Отказоустойчивый кластер Manticore с репликацией таблиц..
